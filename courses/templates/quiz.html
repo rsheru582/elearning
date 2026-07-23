@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EduStream Terminal - Evaluation Hub</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #030712; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+        .quiz-card { background-color: #0f172a; border: 1px solid #1e293b; width: 100%; max-width: 600px; border-radius: 32px; padding: 40px; }
+        h2 { font-size: 24px; font-weight: 900; color: #ffffff; margin-bottom: 24px; }
+        .option-row { width: 100%; text-align: left; padding: 16px; background-color: #1e293b; border: 1px solid #334155; color: #ffffff; border-radius: 16px; margin-bottom: 12px; cursor: pointer; font-size: 14px; font-weight: 700; transition: background 0.2s; }
+        .option-row:hover { background-color: #1f2937; }
+        .feedback { margin-top: 20px; padding: 16px; border-radius: 12px; font-size: 14px; font-weight: 700; display: none; }
+        .next-btn { margin-top: 20px; background-color: #3b82f6; color: #030712; border: none; padding: 14px 28px; font-weight: 900; border-radius: 12px; cursor: pointer; text-transform: uppercase; float: right; }
+    </style>
+</head>
+<body>
+    <div class="quiz-card">
+        <h2 id="question-text">Loading Assessment Module...</h2>
+        <div id="options-box"></div>
+        <div id="feedback-alert" class="feedback"></div>
+        <button id="next-trigger" class="next-btn" style="display:none;" onclick="loadNextQuestion()">Next Question &rarr;</button>
+    </div>
+    <script>
+        let questions = [];
+        let currentIndex = 0;
+        const quizId = window.location.pathname.split('/').filter(Boolean).pop();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch(`/api/quiz/${quizId}/`)
+                .then(res => res.json())
+                .then(data => {
+                    questions = data;
+                    renderQuestion();
+                });
+        });
+
+        function renderQuestion() {
+            if(currentIndex >= questions.length) {
+                document.querySelector('.quiz-card').innerHTML = '<h2>Assessment Verified Complete.</h2><p style="color:#9ca3af; margin-top:10px;">Metrics compiled to your core analytical student database desktop successfully.</p>';
+                return;
+            }
+            const q = questions[currentIndex];
+            document.getElementById('question-text').innerText = q.text;
+            document.getElementById('feedback-alert').style.display = 'none';
+            document.getElementById('next-trigger').style.display = 'none';
+            
+            const choices = [
+                {k: 'A', v: q.option_a}, {k: 'B', v: q.option_b},
+                {k: 'C', v: q.option_c}, {k: 'D', v: q.option_d}
+            ];
+            
+            document.getElementById('options-box').innerHTML = choices.map(c => `
+                <button onclick="submitChoice('${q.id}', '${c.k}')" class="option-row">
+                    ${c.k}. ${c.v}
+                </button>
+            `).join('');
+        }
+
+        function submitChoice(qId, key) {
+            fetch(`/api/question/${qId}/verify/?choice=${key}`)
+                .then(res => res.json())
+                .then(res => {
+                    const alertBox = document.getElementById('feedback-alert');
+                    alertBox.style.display = 'block';
+                    if(res.correct) {
+                        alertBox.style.backgroundColor = 'rgba(34, 197, 94, 0.1)';
+                        alertBox.style.color = '#4ade80';
+                        alertBox.innerText = 'Correct Parameter Answer Executed.';
+                    } else {
+                        alertBox.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                        alertBox.style.color = '#f87171';
+                        alertBox.innerText = `Incorrect. System Expected Index Code Reference Variable: ${res.answer}`;
+                    }
+                    document.getElementById('next-trigger').style.display = 'block';
+                });
+        }
+
+        function loadNextQuestion() {
+            currentIndex++;
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ELearn</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: #030712; 
+            color: #f3f4f6; 
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgba(3, 7, 18, 0.9);
+            border-bottom: 1px solid #1e293b;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: #3b82f6;
+            cursor: pointer;
+        }
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-right: 24px;
+        }
+        .btn-blue {
+            background-color: #2563eb;
+            color: #ffffff !important;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            text-decoration: none;
+        }
+        header {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 120px 24px;
+        }
+        .badge {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #3b82f6;
+            background-color: rgba(37, 99, 235, 0.1);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+        h1 {
+            font-size: 64px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 24px 0;
+            line-height: 1.1;
+        }
+        p {
+            color: #9ca3af;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 48px;
+        }
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+        .cta-main {
+            background-color: #3b82f6;
+            color: #030712;
+            border: none;
+            padding: 16px 32px;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .cta-sub {
+            background-color: #111827;
+            border: 1px solid #1e293b;
+            color: #ffffff;
+            padding: 16px 32px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo" onclick="window.location.href='/'">ELearn</div>
+        <div class="nav-links">
+            <a href="{% url 'login' %}">Sign In</a>
+            <a href="{% url 'register' %}" class="btn-blue">Register</a>
+        </div>
+    </nav>
+    <header>
+        <span class="badge">The Cinematic Workspace Standard</span>
+        <h1>Learn at the speed of production.</h1>
+        <p>Access premium sequential video tracks, live infrastructure streaming, and interactive workflows built for engineering professionals.</p>
+        <div class="cta-group">
+            <button onclick="window.location.href='{% url 'register' %}'" class="cta-main">Get Instant Access</button>
+            <button onclick="window.location.href='{% url 'login' %}'" class="cta-sub">Resume Course Track</button>
+        </div>
+    </header>
+</body>
+</html>

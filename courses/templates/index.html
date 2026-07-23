@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduStream Hub - Student Desktop</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #030712; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; padding-bottom: 60px; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background-color: rgba(3, 7, 18, 0.9); border-bottom: 1px solid #1e293b; }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: -1px; color: #3b82f6; cursor: pointer; text-decoration: none; }
+        .user-badge { font-size: 12px; font-family: monospace; color: #9ca3af; background-color: #0f172a; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 8px; }
+        .logout-btn { color: #f87171; text-decoration: none; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-left: 20px; }
+        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1200px; margin: 40px auto; padding: 0 24px; }
+        .stat-card { background: linear-gradient(135deg, #0f172a 0%, #030712 100%); border: 1px solid #1e293b; padding: 24px; border-radius: 16px; }
+        .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #3b82f6; margin-bottom: 8px; display: block; }
+        .stat-val { font-size: 32px; font-weight: 900; color: #ffffff; }
+        .progress-bar { width: 100%; background-color: #111827; height: 6px; border-radius: 999px; margin-top: 16px; background: #111827; overflow: hidden; }
+        .progress-fill { height: 100%; background: #3b82f6; border-radius: 999px; }
+        main { max-width: 1200px; margin: 40px auto; padding: 0 24px; }
+        .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #3b82f6; margin-bottom: 24px; }
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+        .premium-card { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 24px; padding: 24px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, border-color 0.2s; }
+        .premium-card:hover { transform: translateY(-4px); border-color: #334155; }
+        .thumb-placeholder { width: 100%; height: 160px; border-radius: 16px; margin-bottom: 20px; background: linear-gradient(135deg, #1d4ed8, #2563eb); }
+        .duration-tag { font-size: 10px; font-family: monospace; color: #ffffff; background: #030712; padding: 4px 8px; border-radius: 4px; border: 1px solid #1e293b; text-transform: uppercase; }
+        .card-title { font-size: 20px; font-weight: 800; color: #ffffff; margin: 16px 0 8px 0; }
+        .card-desc { color: #9ca3af; font-size: 14px; line-height: 1.5; margin-bottom: 24px; font-weight: 300; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #111827; padding-top: 16px; font-size: 13px; }
+        .instructor-name { color: #6b7280; font-weight: 500; }
+        .explore-link { color: #3b82f6; font-weight: 700; }
+    </style>
+</head>
+<body>
+   <nav>
+    <a href="/dashboard/" class="logo">ELearn</a>
+    <div class="nav-links">
+        <a href="/dashboard/">My Dashboard</a>
+        <a href="/courses/" style="color: #3b82f6 !important;">Courses</a>
+        <a href="{% url 'logout' %}" style="color: #f87171;">Logout</a>
+    </div>
+</nav>
+    
+    <main>
+        <h2 class="section-title">Active Curriculums</h2>
+        <div id="course-container" class="course-grid"></div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/courses/')
+                .then(res => res.json())
+                .then(courses => {
+                    const gradients = [
+                        'linear-gradient(135deg, #1e40af, #3b82f6)',
+                        'linear-gradient(135deg, #6b21a8, #ec4899)',
+                        'linear-gradient(135deg, #065f46, #14b8a6)'
+                    ];
+                    document.getElementById('course-container').innerHTML = courses.map((course, idx) => `
+                        <div onclick="window.location.href='/course/${course.id}/'" class="premium-card">
+                            <div>
+                                <div class="thumb-placeholder" style="background: ${gradients[idx % 3]}"></div>
+                                <span class="duration-tag">${course.duration}</span>
+                                <h3 class="card-title">${course.title}</h3>
+                                <p class="card-desc">${course.description}</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="instructor-name">By ${course.instructor}</span>
+                                <span class="explore-link">Explore &rarr;</span>
+                            </div>
+                        </div>`).join('');
+                });
+        });
+    </script>
+</body>
+</html>

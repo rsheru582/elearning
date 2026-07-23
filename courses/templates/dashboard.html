@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduStream Terminal - Student Analytics</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #030712; color: #f3f4f6; font-family: system-ui, sans-serif; min-height: 100vh; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background-color: rgba(3, 7, 18, 0.9); border-bottom: 1px solid #1e293b; }
+        .logo { font-size: 24px; font-weight: 900; color: #3b82f6; text-decoration: none; }
+        .nav-links a { color: #9ca3af; text-decoration: none; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-left: 24px; }
+        .nav-links a:hover, .active-nav { color: #3b82f6 !important; }
+        
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 24px; }
+        .dashboard-header { margin-bottom: 40px; }
+        h1 { font-size: 36px; font-weight: 900; color: #ffffff; }
+        
+        /* Premium Matrix Metrics Layout */
+        .metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        .metric-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 24px; padding: 28px; position: relative; overflow: hidden; }
+        .metric-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #3b82f6; margin-bottom: 12px; display: block; }
+        .metric-value { font-size: 36px; font-weight: 900; color: #ffffff; display: flex; align-items: baseline; gap: 8px; }
+        .metric-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+        
+        /* Styled Progress Micro-Bar */
+        .bar-container { width: 100%; background: #030712; height: 8px; border-radius: 99px; margin-top: 16px; overflow: hidden; border: 1px solid #1e293b; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius: 99px; }
+
+        /* Syllabus Activity Logs Table List */
+        .workspace-panel { background: #0f172a; border: 1px solid #1e293b; border-radius: 28px; padding: 32px; }
+        h2 { font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 24px; }
+        .quiz-item-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #030712; border: 1px solid #1e293b; border-radius: 20px; margin-bottom: 16px; transition: border-color 0.2s; }
+        .quiz-item-row:hover { border-color: #334155; }
+        .quiz-details h4 { font-size: 16px; font-weight: 700; color: #ffffff; }
+        .quiz-details p { font-size: 13px; color: #6b7280; margin-top: 4px; }
+        
+        .start-quiz-btn { background-color: #3b82f6; color: #030712; text-decoration: none; padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; transition: background-color 0.2s; }
+        .start-quiz-btn:hover { background-color: #60a5fa; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/dashboard/" class="logo">EDUSTREAM</a>
+        <div class="nav-links">
+            <a href="/dashboard/" class="active-nav">My Dashboard</a>
+            <a href="/courses/">Browse Catalogue</a>
+            <a href="{% url 'logout' %}" style="color: #f87171;">Disconnect</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Workspace Analytics</h1>
+            <p style="color: #9ca3af; margin-top: 6px;">Real-time performance tracking metrics console ledger.</p>
+        </div>
+
+        <!-- 3-Column Styled Metrics Track Strip -->
+        <div class="metrics-row">
+            <div class="metric-box">
+                <span class="metric-title">Syllabus Completion</span>
+                <div class="metric-value">{{ progress_percentage }}%</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: {{ progress_percentage }}%"></div>
+                </div>
+            </div>
+            <div class="metric-box">
+                <span class="metric-title" style="color: #a855f7;">Time Logged</span>
+                <div class="metric-value">{{ hours_logged }}<span style="font-size:16px; color:#6b7280; font-weight:500;">Hours</span></div>
+                <p class="metric-sub">Aggregated system activity runtime</p>
+            </div>
+            <div class="metric-box">
+                <span class="metric-title" style="color: #22c55e;">Available Modules</span>
+                <div class="metric-value">0{{ total_courses_count }}<span style="font-size:16px; color:#6b7280; font-weight:500;">Tracks</span></div>
+                <p class="metric-sub">Connected directly to MySQL database app layers</p>
+            </div>
+        </div>
+
+        <!-- Styled Examination Modules Area -->
+        <div class="workspace-panel">
+            <h2>Active Quiz Assessments (0{{ total_quizzes_count }})</h2>
+            
+            <div class="quiz-item-row">
+                <div class="quiz-details">
+                    <h4>Web Architecture Core Evaluation</h4>
+                    <p>Associated Course: Full-Stack Web Development Track</p>
+                </div>
+                <a href="/quiz/1/" class="start-quiz-btn">Start Test &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
