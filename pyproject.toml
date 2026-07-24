@@ -1,0 +1,2 @@
+toml[tool.vercel]
+entrypoint = "elearn.wsgi:application"
